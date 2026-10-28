@@ -5,6 +5,14 @@
 //JOption Dialogue Boxes
 import javax.swing.JOptionPane;
 
+/ ===== NEW ADDITION: LESSON 12 - JAVA GUI =====
+// These imports are used to create the graphical interface.
+import javax.swing.JFrame;   // NEW: Creates the main window.
+import javax.swing.JButton;  // NEW: Creates clickable buttons.
+import javax.swing.JLabel;   // NEW: Displays text in the window.
+import javax.swing.JPanel;   // NEW: Groups GUI components.
+import java.awt.GridLayout;  // NEW: Arranges components in rows and columns.
+
 public class Mainbank {
 	
 	// Class Bank Account
@@ -16,6 +24,65 @@ public class Mainbank {
 		public BankAccount(String name) {
 			this.accountHolder = name;
 		}
+
+		// NEW ADDITION: GETTER METHOD
+        // Returns the current account holder's name.
+        public String getAccountHolder() {
+            return accountHolder;
+        }
+
+        // NEW ADDITION: SETTER METHOD
+        // Updates the account holder's name.
+        public void setAccountHolder(String name) {
+            this.accountHolder = name;
+        }
+
+        // NEW ADDITION: UPDATE ACCOUNT HOLDER FEATURE
+        // Allows the user to change the account holder's name.
+        public void changeAccountHolder() {
+			 // Asks the user to enter a new account holder's name.
+            String newName = JOptionPane.showInputDialog(
+                null,
+                "Current Account Holder: " + getAccountHolder()
+                + "\nEnter new account holder name:",
+                "Update Account Name",
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            // Stops if the user clicks Cancel.
+            if (newName == null) {
+                return;
+            }
+
+            // Removes spaces before and after the entered name.
+            newName = newName.trim();
+
+            // Checks whether the entered name is empty.
+            if (newName.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Name cannot be empty.",
+                    "Invalid Name",
+                    JOptionPane.ERROR_MESSAGE
+                );
+
+                // Stops because the entered name is invalid.
+                return;
+            }
+
+            // Saves the new name using the setter method.
+            setAccountHolder(newName);
+
+            // Confirms that the name was updated successfully.
+            JOptionPane.showMessageDialog(
+                null,
+                "Account holder name successfully updated to: "
+                + getAccountHolder(),
+                "Update Successful",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
 		
 		// Method to check balance
 		public void checkBalance(){
