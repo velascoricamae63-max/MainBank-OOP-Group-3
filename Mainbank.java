@@ -164,46 +164,151 @@ public class Mainbank {
 	}
 
 	//	RICA
-	// main method
-	public static void main(String[] args) {
-		boolean isRunning = true;// Controls if Continue running
-		BankAccount account = null; //Hold the Bank Object
-		String accountName =""; // 
-		
-		
-		while (accountName.isEmpty()){ // check if account name is empty
-			accountName = JOptionPane.showInputDialog(null, "--- Welcome to the Simple Bank System --- \n\n"
-				+ "Enter Account Holder Name: "); // input
-		}
-		
-		account = new BankAccount(accountName);//NEW ACCOUNT
-		
-		// Main Loop
-		while (isRunning) { // Check if the program is still running
-		String choice = JOptionPane.showInputDialog(null, "-----------------------------\n"
-				+ "1. Check Balance \n"
-				+ "2. Deposit Money \n"
-				+ "3. Withdraw Money \n"
-				+ "4. Exit \n\n"
-				+ "Enter your choice (1-4):");
-			
-			switch(choice) {
-			case"1":
-				account.checkBalance(); // Displays balance dialog
-				break;// Exits switch statement and returns to main loop
-			case"2":
-				account.deposit();// Triggers deposit process
-				break;
-			case"3":
-				account.withdraw();// Triggers withdraw process
-				break;
-			case "4":
-				JOptionPane.showMessageDialog(null, "Thank you for using the Bank System, " +account.accountHolder + " Goodbye!");
-				isRunning = false; // Close the program Terminate while Loop
-				break;
-			default:
-				JOptionPane.showMessageDialog(null, "Invalid input! Please enter a valid number.");
-			}
-		}
-	}
+// MAIN METHOD: The program starts running here.
+    public static void main(String[] args) {
+
+        // Stores the account holder's name.
+        String accountName = "";
+        while (accountName.trim().isEmpty()) {  // Keeps asking until the user enters a non-empty name.
+
+            // Displays the welcome message and asks for the account name.
+            String input = JOptionPane.showInputDialog(
+                null,
+                "--- Welcome to the Simple Bank System ---"
+                + "\n\nEnter Account Holder Name:",
+                "Welcome",
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            // Ends the program if the user clicks Cancel.
+            if (input == null) {
+                return;
+            }
+
+            // Removes unnecessary spaces from the entered name.
+            accountName = input.trim();
+
+            // Checks whether the name is empty.
+            if (accountName.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Name cannot be empty. Please enter your name."
+                );
+            }
+        }
+
+        // Creates a bank account using the entered name.
+        BankAccount account = new BankAccount(accountName);
+
+        // ===== NEW ADDITION: JAVA GUI - JFrame =====
+        // Creates the main application window.
+        JFrame frame = new JFrame("Simple Bank System");
+
+        // Sets the window width to 350 and height to 330 pixels.
+        frame.setSize(350, 330);
+
+        // Closes the application when the window is closed.
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Centers the window on the screen.
+        frame.setLocationRelativeTo(null);
+
+        // ===== NEW ADDITION: JAVA GUI - JLabel =====
+        // Displays the system title and account holder's name.
+        JLabel title = new JLabel(
+            "Simple Bank System - " + account.getAccountHolder(),
+            JLabel.CENTER
+        );
+
+        // ===== NEW ADDITION: JAVA GUI - JPanel =====
+        // Creates a panel to hold and organize the buttons.
+        JPanel panel = new JPanel();
+
+        // ===== NEW ADDITION: LAYOUT MANAGER - GridLayout =====
+        // Arranges five buttons in one column with spacing between them.
+        panel.setLayout(new GridLayout(5, 1, 8, 8));
+
+        // ===== NEW ADDITION: JAVA GUI - JButton =====
+        // Creates the Check Balance button.
+        JButton checkButton = new JButton("Check Balance");
+
+        // Creates the Deposit Money button.
+        JButton depositButton = new JButton("Deposit Money");
+
+        // Creates the Withdraw Money button.
+        JButton withdrawButton = new JButton("Withdraw Money");
+
+        // Creates the button for changing the account holder's name.
+        JButton updateNameButton =
+            new JButton("Update Account Holder Name");
+
+        // Creates the Exit button.
+        JButton exitButton = new JButton("Exit");
+
+        // ===== NEW ADDITION: EVENT HANDLING =====
+        // addActionListener() responds when the user clicks a button.
+
+        // Calls checkBalance() when Check Balance is clicked.
+        checkButton.addActionListener(e -> account.checkBalance());
+
+        // Calls deposit() when Deposit Money is clicked.
+        depositButton.addActionListener(e -> account.deposit());
+
+        // Calls withdraw() when Withdraw Money is clicked.
+        withdrawButton.addActionListener(e -> account.withdraw());
+
+        // NEW ADDITION: Handles the account name update button.
+        updateNameButton.addActionListener(e -> {
+
+            // Opens the method that asks for a new account holder's name.
+            account.changeAccountHolder();
+
+            // Refreshes the title using the current account holder's name.
+            title.setText(
+                "Simple Bank System - " + account.getAccountHolder()
+            );
+        });
+
+        // NEW ADDITION: Handles the Exit button click.
+        exitButton.addActionListener(e -> {
+
+            // Displays a goodbye message before closing the application.
+            JOptionPane.showMessageDialog(
+                frame,
+                "Thank you for using the Bank System, "
+                + account.getAccountHolder() + "!\nGoodbye!",
+                "Thank You",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
+            // Closes the main window.
+            frame.dispose();
+        });
+
+        // ===== NEW ADDITION: ADDING COMPONENTS TO THE GUI =====
+
+        // Adds the Check Balance button to the panel.
+        panel.add(checkButton);
+
+        // Adds the Deposit Money button to the panel.
+        panel.add(depositButton);
+
+        // Adds the Withdraw Money button to the panel.
+        panel.add(withdrawButton);
+
+        // Adds the Update Account Holder Name button to the panel.
+        panel.add(updateNameButton);
+
+        // Adds the Exit button to the panel.
+        panel.add(exitButton);
+
+        // Places the title at the top of the window.
+        frame.add(title, "North");
+
+        // Places the panel containing the buttons in the center.
+        frame.add(panel, "Center");
+
+        // Displays the completed GUI window.
+        frame.setVisible(true);
+    }
 }
